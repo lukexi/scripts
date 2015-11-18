@@ -12,7 +12,7 @@ RELEASE_DIR=.release/$PROJECT_NAME/
 
 # Clean the temp dir
 rm -rf $RELEASE_DIR
-mkdir $RELEASE_DIR
+mkdir -p $RELEASE_DIR
 
 # Copy the executables into the release dir
 stack build
@@ -23,9 +23,11 @@ cp -R dlls/* $RELEASE_DIR
 cp -R app/ $RELEASE_DIR
 cp README.txt $RELEASE_DIR
 
-# Zip up the release and copy it to the desktop 
-7z a -tzip $RELEASE_ZIP $RELEASE_DIR
+# Zip up the release and copy it to the desktop
+cd .release 
+7z a -tzip $RELEASE_ZIP $PROJECT_NAME/
 cp $RELEASE_ZIP /c/Users/$USER/Desktop
 
 # Copy to the desktop for testing
-cp -R .release/$RELEASE_DIR /c/Users/$USER/Desktop/
+cp -R $PROJECT_NAME/ /c/Users/$USER/Desktop/$PROJECT_NAME-$GIT_HASH
+cd ..
