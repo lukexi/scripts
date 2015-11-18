@@ -1,0 +1,31 @@
+# Get the short git hash (e.g. fa5g6b) to tag the zip with
+GIT_HASH=`git rev-parse --short HEAD`
+
+# Parse out the project name from the .cabal file
+CABAL_FILE=`echo *.cabal`
+PROJECT_NAME="${CABAL_FILE%%.*}"
+
+RELEASE_ZIP=$PROJECT_NAME-$GIT_HASH.zip
+
+# Use .release as a temporary directory
+RELEASE_DIR=.release/$PROJECT_NAME/
+
+# Clean the temp dir
+rm -rf $RELEASE_DIR
+mkdir $RELEASE_DIR
+
+# Copy the executables into the release dir
+stack build
+stack install $PROJECT_NAME --local-bin-path $RELEASE_DIR
+
+# Copy binary, source files and readme into the release dir
+cp -R dlls/* $RELEASE_DIR
+cp -R app/ $RELEASE_DIR
+cp README.txt $RELEASE_DIR
+
+# Zip up the release and copy it to the desktop 
+7z a -tzip $RELEASE_ZIP $RELEASE_DIR
+cp $RELEASE_ZIP /c/Users/$USER/Desktop
+
+# Copy to the desktop for testing
+cp -R .release/$RELEASE_DIR /c/Users/$USER/Desktop/
