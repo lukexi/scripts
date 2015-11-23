@@ -1,1 +1,1 @@
-for i in `echo */`; do (cd $i; $@); done
+for i in `echo */`; do (echo $i; cd $i; $@); done
