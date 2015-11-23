@@ -1,11 +1,13 @@
-# Get the short git hash (e.g. fa5g6b) to tag the zip with
+# Get the short git hash (e.g. fa5g6b)
 GIT_HASH=`git rev-parse --short HEAD`
+# Get date in form of 15Nov23-0321 to name the zip with
+DATE=`date +%y%b%d-%H%M`
 
 # Parse out the project name from the .cabal file
 CABAL_FILE=`echo *.cabal`
 PROJECT_NAME="${CABAL_FILE%%.*}"
 
-RELEASE_ZIP=$PROJECT_NAME-$GIT_HASH.zip
+RELEASE_ZIP=$PROJECT_NAME-$DATE.zip
 
 # Use .release as a temporary directory
 RELEASE_DIR=.release/$PROJECT_NAME/
@@ -29,5 +31,5 @@ cd .release
 cp $RELEASE_ZIP /c/Users/$USER/Desktop
 
 # Copy to the desktop for testing
-cp -R $PROJECT_NAME/ /c/Users/$USER/Desktop/$PROJECT_NAME-$GIT_HASH
+cp -R $PROJECT_NAME/ /c/Users/$USER/Desktop/$PROJECT_NAME-$DATE
 cd ..
