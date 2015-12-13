@@ -1,3 +1,5 @@
+# Add this to .bash_profile/.profile to let these packages share a .stack-work directory
+# STACK_YAML=$HOME/Projects/scripts
 resolver: nightly-2015-12-03
 packages:
 - ../animation-pal
