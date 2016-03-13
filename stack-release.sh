@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Get the short git hash (e.g. fa5g6b)
 GIT_HASH=`git rev-parse --short HEAD`
 # Get date in form of 15Nov23-0321 to name the zip with

@@ -1,3 +1,4 @@
+#!/bin/bash
 
 help_text="-h<break-down> Heap residency profile (hp2ps) (output file <program>.hp)
       break-down: c = cost centre stack (default)

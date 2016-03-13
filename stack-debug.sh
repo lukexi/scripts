@@ -1,3 +1,4 @@
+#!/bin/bash
 
 stack build --executable-profiling --library-profiling || exit 1 # Don't continue if the build fails
 

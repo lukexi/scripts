@@ -1,2 +1,4 @@
+#!/bin/bash
+
 #FIXME need to preserve quotes around $@
 stack build --file-watch --exec "$@"
