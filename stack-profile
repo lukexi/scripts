@@ -1,5 +1,13 @@
 #!/bin/bash
 
+openInWindow() {
+    if hash open 2>/dev/null; then
+        open "$@"
+    else
+        explorer "$@"
+    fi
+}
+
 help_text="-h<break-down> Heap residency profile (hp2ps) (output file <program>.hp)
       break-down: c = cost centre stack (default)
                   m = module
@@ -14,6 +22,12 @@ if [[ "$#" -lt 2 ]]; then
   exit
 fi
 
+PROFTYPE=$2
+if [ -z "$2" ]
+  then
+    PROFTYPE=-hc
+fi
+
 # Build the environment and executables with -prof.
 # Make sure libraries have 
 # ghc-prof-options: -fprof-auto
@@ -24,13 +38,17 @@ stack build --executable-profiling --library-profiling || exit 1 # Don't continu
 
 # Allow the program to fail, as it will still generate a profile
 trap "echo 'Killed'" INT
-stack exec $1 -- +RTS ${@:2} || echo "Exiting"
+
+# We need to use this odd method of running rather than: 
+# stack exec $1 -- +RTS ${@:2} || echo "Exiting"
+# as the -- doesn't seem to be triggering RTS options correctly on Windows
+`stack exec which $1` +RTS $PROFTYPE
 trap - INT
 
 # Generate a heap graph from the heap profile
 hp2ps -c $1.hp
-open $1.ps
+openInWindow $1.ps
 
 # Generate a flame graph from the stack profile
-cat $1.prof | ghc-prof-flamegraph | flamegraph.pl > $1.svg
-# open $1.svg
+prof-to-flamegraph $1
+openInWindow $1.svg
