@@ -18,7 +18,7 @@ help_text="-h<break-down> Heap residency profile (hp2ps) (output file <program>.
 
 if [[ "$#" -lt 2 ]]; then
   echo $help_text
-  
+
   exit
 fi
 
@@ -29,7 +29,7 @@ if [ -z "$2" ]
 fi
 
 # Build the environment and executables with -prof.
-# Make sure libraries have 
+# Make sure libraries have
 # ghc-prof-options: -fprof-auto
 # in their cabal files to generate SCCs
 # and executables include -prof
@@ -39,10 +39,10 @@ stack build --executable-profiling --library-profiling || exit 1 # Don't continu
 # Allow the program to fail, as it will still generate a profile
 trap "echo 'Killed'" INT
 
-# We need to use this odd method of running rather than: 
+# We need to use this odd method of running rather than:
 # stack exec $1 -- +RTS ${@:2} || echo "Exiting"
 # as the -- doesn't seem to be triggering RTS options correctly on Windows
-`stack exec which $1` +RTS $PROFTYPE
+`stack exec which $1` +RTS $PROFTYPE -p
 trap - INT
 
 # Generate a heap graph from the heap profile

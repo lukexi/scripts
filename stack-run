@@ -1,3 +1,11 @@
 #!/bin/bash
 
-stack build && stack exec $1 ${@:2}
+# If nothing passed, use the current directory's name as the executable
+# (could also look at the cabal file)
+TARGET=$1
+if [ -z "$1" ]
+  then
+    TARGET=$(basename `pwd`)
+fi
+
+stack build && stack exec $TARGET ${@:2}
