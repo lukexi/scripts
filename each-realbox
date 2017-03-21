@@ -1,0 +1,6 @@
+#!/bin/bash
+
+ssh realbox1 "$@" &
+ssh realbox2 "$@" &
+ssh realbox3 "$@" &
+wait

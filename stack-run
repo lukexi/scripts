@@ -8,4 +8,4 @@ if [ -z "$1" ]
     TARGET=$(basename `pwd`)
 fi
 
-stack build && stack exec $TARGET ${@:2}
+stack build $TARGET && stack exec $TARGET ${@:2}

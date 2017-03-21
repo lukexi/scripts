@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install ghc-prof-flamegraph
+# stack install ghc-prof-flamegraph
+
 openInWindow() {
     if hash open 2>/dev/null; then
         open "$@"
@@ -16,10 +19,16 @@ help_text="-h<break-down> Heap residency profile (hp2ps) (output file <program>.
                   r = retainer
                   b = biography (LAG,DRAG,VOID,USE)"
 
-if [[ "$#" -lt 2 ]]; then
-  echo $help_text
+# if [[ "$1" -eq '-h' ]]; then
+#   echo $help_text
 
-  exit
+#   exit
+# fi
+
+TARGET=$1
+if [ -z "$1" ]
+  then
+    TARGET=$(basename `pwd`)
 fi
 
 PROFTYPE=$2
@@ -42,13 +51,13 @@ trap "echo 'Killed'" INT
 # We need to use this odd method of running rather than:
 # stack exec $1 -- +RTS ${@:2} || echo "Exiting"
 # as the -- doesn't seem to be triggering RTS options correctly on Windows
-`stack exec which $1` +RTS $PROFTYPE -p
+`stack exec which $TARGET` +RTS $PROFTYPE -p -s
 trap - INT
 
 # Generate a heap graph from the heap profile
-hp2ps -c $1.hp
-openInWindow $1.ps
+stack exec hp2ps -- -c $TARGET.hp
+openInWindow $TARGET.ps
 
 # Generate a flame graph from the stack profile
-prof-to-flamegraph $1
-openInWindow $1.svg
+prof-to-flamegraph $TARGET
+openInWindow $TARGET.svg
