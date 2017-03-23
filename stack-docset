@@ -1,0 +1,7 @@
+#!/bin/sh
+TARGET="~/Library/Application Support/Dash/DocSets/Haskell/Haskell-Stack.docset"
+stack exec -- haddocset -t $TARGET create
+stack build --haddock
+stack exec -- haddocset -t $TARGET add $(stack path --snapshot-pkg-db)/*.conf
+stack exec -- haddocset -t $TARGET add $(stack path --local-pkg-db)/*.conf
+open $TARGET
