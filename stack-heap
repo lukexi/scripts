@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Install ghc-prof-flamegraph
+# stack install ghc-prof-flamegraph
+
+openInWindow() {
+    if hash open 2>/dev/null; then
+        open "$@"
+    else
+        explorer "$@"
+    fi
+}
+
+TARGET=$1
+if [ -z "$1" ]
+  then
+    TARGET=$(basename `pwd`)
+fi
+
+# Allow the program to fail, as it will still generate a profile
+trap "echo 'Killed'" INT
+
+`stack exec which $TARGET` +RTS -hT -s
+trap - INT
+
+# Generate a heap graph from the heap profile
+stack exec hp2ps -- -c $TARGET.hp
+openInWindow $TARGET.ps
+
